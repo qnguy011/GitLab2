@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>GitLab2</name>
+	<name>imitation</name>
 	<comment>Project imitation created by Buildship.</comment>
 	<projects>
 	</projects>
@@ -22,7 +22,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>0</id>
+			<id>1635720812915</id>
 			<name></name>
 			<type>30</type>
 			<matcher>

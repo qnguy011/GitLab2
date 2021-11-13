@@ -1,5 +1,7 @@
 plugins {
    id 'java'
+   id "org.xbib.gradle.plugin.git" version "2.0.0"
+   id 'project-report'
 }
 
 java {
@@ -21,27 +23,13 @@ test {
     useJUnitPlatform()
 }
 
-task reports(dependsOn: ['check', 'javadoc']){
+task reports(dependsOn: ['test', 'javadoc', 'check']){
     description 'create reports'
 }
 
-task copyFiles(type: Copy){
-    from '$buildDir/docs'
-    into '$buildDir/tmp/website/docs'
-
-    from '$buildDir/reports'
-    into '$buildDir/tmp/website/reports'
-
-    dependsOn 'reports'
-}
-
-task deployReports(dependsOn: ['copyFiles']){
-    description 'deploy reports'
-}
-
-task clonePages() {                                             
+task clonePages(dependsOn: 'reports'){
     doLast {
-        mkdir '$buldDir/gh-pages'
+        mkdir 'build/gh-pages'
         def thisRepo = rootProject.projectDir.toString()
         def pagesDir = "$buildDir/gh-pages"
         project.delete {
@@ -59,24 +47,33 @@ task clonePages() {
     }
 }
 
-task copyReports (type: Copy, dependsOn: ['bake', 'clonePages']) {  
-    from "$buildDir/tmp/website"
-    into "$buildDir/gh-pages"
-}
-
-task updateGHPages (dependsOn: 'copyReports') {                     
+task deployReports (type: Copy, dependsOn: 'clonePages'){
     group = "Reporting"
-    description  'Copies reports to the gh-pages branch in preparation for a future push to GitHub'
-    doLast {
+    doLast{
+        from ("$buildDir/reports"){
+            include "**/*"
+        }
+        into "$buildDir/gh-pages/reports"
+
+        from ("$buildDir/docs"){
+            include "**/*"
+        }
+        into "$buildDir/gh-pages/docs"
         def pagesDir = "$buildDir/gh-pages"
         def grgit = git.open {
             dir = pagesDir + "/.git"
         }
+
+        grgit.add (update: false, patterns: ['docs/'])
         grgit.add (update: true, patterns: ['docs/'])
+        grgit.add (update: false, patterns: ['reports/'])
         grgit.add (update: true, patterns: ['reports/'])
-        grgit.commit {
-            message = "Updating web pages"
+        
+        grgit.commit{
+            message = "update docs and reports"
         }
-        grgit.push {}
+        grgit.push()
     }
 }
+
+build.dependsOn deployReports

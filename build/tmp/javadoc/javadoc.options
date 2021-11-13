@@ -1,0 +1,8 @@
+-classpath 'D:\\School\\Fall 2021\\CS350\\flatImitation\\build\\classes\\java\\main;D:\\School\\Fall 2021\\CS350\\flatImitation\\build\\resources\\main'
+-d 'D:\\School\\Fall 2021\\CS350\\flatImitation\\build\\docs\\javadoc'
+-doctitle 'GitLab2 API'
+-notimestamp 
+-quiet 
+-windowtitle 'GitLab2 API'
+'D:\\School\\Fall 2021\\CS350\\flatImitation\\src\\main\\java\\Author.java'
+'D:\\School\\Fall 2021\\CS350\\flatImitation\\src\\main\\java\\Vocabulary.java'

@@ -27,17 +27,19 @@ task reports (dependsOn: ['test', 'javadoc']){
 }
 
 task deployReports(type: Copy, dependsOn: ['reports']){
-    from "/build/docs"
-    into "/build/gh-pages"
+    from 'build/docs'
+    into 'build/gh-pages'
 
-    from "/build/reports"
-    into "/build/gh-pages"
+    from 'build/reports'
+    into 'build/gh-pages'
 
 doLast {
-        def pagesDir = "/$buildDir/gh-pages"
+        def pagesDir = "$buildDir/gh-pages"
         def grgit = git.open {
-            dir = pagesDir + ".git"
+            dir = pagesDir
         }
+        grgit.add (update: false, patterns: ['docs/'])
+        grgit.add (update: true, patterns: ['docs/'])
         grgit.add (update: false, patterns: ['reports/'])
         grgit.add (update: true, patterns: ['reports/'])
 }}

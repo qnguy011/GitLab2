@@ -1,1 +1,0 @@
-git@github.com:qnguy011/GitLab2.git
